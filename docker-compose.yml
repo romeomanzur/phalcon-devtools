@@ -1,55 +1,68 @@
-version: "3.6"
+name: phalcon-devtools
+
 services:
-  service_php:
+  phalcon-devtools:
     build:
       context: ./docker/php
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.4}
+
     working_dir: /app
     restart: unless-stopped
+
     volumes:
       - ./:/app
-    depends_on:
-      - service_mysql
-      - service_postgres
-    links:
-      - service_mysql
-      - service_postgres
 
-  service_nginx:
+    depends_on:
+      - mysql
+      - postgres
+
+  nginx:
     image: nginx:alpine
     restart: unless-stopped
+
     ports:
-      - 8081:80
+      - "8081:80"
+
     volumes:
       - ./:/app
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
       - ./docker/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf
       - ./docker/nginx/fastcgi-php.conf:/etc/nginx/fastcgi-php.conf
-    depends_on:
-      - service_php
 
-  service_mysql:
+    depends_on:
+      - phalcon-devtools
+
+  mysql:
     image: mariadb
     restart: unless-stopped
+
     environment:
-      - MYSQL_DATABASE=devtools
-      - MYSQL_USER=devtools
-      - MYSQL_PASSWORD=password
-      - MYSQL_ROOT_PASSWORD=password
+      MYSQL_DATABASE: devtools
+      MYSQL_USER: devtools
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
     volumes:
       - db_mysql_data:/var/lib/mysql/
       - ./docker/mysql/config:/etc/mysql/conf.d/
 
-  service_postgres:
+  postgres:
     image: postgis/postgis:13-master
     restart: unless-stopped
+
     environment:
-      - POSTGRES_USER=devtools
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=devtools
+      POSTGRES_USER: devtools
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: devtools
+
     volumes:
       - db_postgres_data:/var/lib/postgresql/data
+
     healthcheck:
-      test: pg_isready -q -d devtools -U devtools
+      test:
+        - CMD-SHELL
+        - pg_isready -q -d devtools -U devtools
       timeout: 5s
 
 volumes:

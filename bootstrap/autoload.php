@@ -11,13 +11,6 @@
 
 declare(strict_types=1);
 
-if (!extension_loaded('phalcon')) {
-    throw new Exception(
-        "Phalcon extension isn't installed, follow these instructions to install it: " .
-        'https://docs.phalcon.io/en/latest/installation'
-    );
-}
-
 /**
  * @const DEVTOOLS_START_TIME The start time of the Devtools. Used for profiling.
  */
@@ -106,6 +99,12 @@ foreach ($vendorAutoload as $file) {
 
 if (false === class_exists('Composer\Autoload\ClassLoader', false)) {
     throw new Exception('Please run composer install');
+}
+
+if (!class_exists(\Phalcon\Support\Version::class)) {
+    throw new RuntimeException(
+        'Phalcon 6 is required. Install it with "composer require phalcon/phalcon:^6.0".'
+    );
 }
 
 /**
