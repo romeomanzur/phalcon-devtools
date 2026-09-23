@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -25,7 +26,6 @@ use Phalcon\DevTools\Options\OptionsAware as ModelOption;
 use Phalcon\DevTools\Utils;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Filter\Validation;
-use Phalcon\Filter\Validation\Validator\Email as EmailValidator;
 use ReflectionClass;
 use ReflectionClassConstant;
 use ReflectionProperty;
@@ -171,7 +171,7 @@ class Model extends AbstractComponent
                 }
 
                 $entityNamespace = $this->modelOptions->hasOption('namespace')
-                    ? $this->modelOptions->getOption('namespace')."\\" : '';
+                    ? $this->modelOptions->getOption('namespace') . "\\" : '';
 
                 $refColumns = $reference->getReferencedColumns();
                 $columns = $reference->getColumns();
@@ -202,8 +202,6 @@ class Model extends AbstractComponent
 
         $alreadyInitialized  = false;
         $alreadyValidations  = false;
-        $alreadyFind         = false;
-        $alreadyFindFirst    = false;
         $alreadyColumnMapped = false;
         $attributes          = [];
 
@@ -226,7 +224,7 @@ class Model extends AbstractComponent
                 $linesCode = file($modelPath);
                 $fullClassName = $this->modelOptions->getOption('className');
                 if ($this->modelOptions->hasOption('namespace')) {
-                    $fullClassName = $this->modelOptions->getOption('namespace').'\\'.$fullClassName;
+                    $fullClassName = $this->modelOptions->getOption('namespace') . '\\' . $fullClassName;
                 }
                 $reflection = new ReflectionClass($fullClassName);
                 foreach ($reflection->getMethods() as $method) {
@@ -266,12 +264,6 @@ class Model extends AbstractComponent
                         case 'validation':
                             $alreadyValidations = true;
                             break;
-                        case 'find':
-                            $alreadyFind = true;
-                            break;
-                        case 'findFirst':
-                            $alreadyFindFirst = true;
-                            break;
                         case 'columnMap':
                             $alreadyColumnMapped = true;
                             break;
@@ -300,7 +292,8 @@ class Model extends AbstractComponent
 
                 foreach ($reflection->getProperties() as $property) {
                     $propertyName = $property->getName();
-                    if (!empty($possibleFieldsTransformed[$propertyName])
+                    if (
+                        !empty($possibleFieldsTransformed[$propertyName])
                         || $property->getDeclaringClass()->getName() !== $fullClassName
                     ) {
                         continue;
@@ -361,11 +354,6 @@ class Model extends AbstractComponent
                     $validations[] = $snippet->getValidateInclusion($fieldName, $varItems);
                 }
             }
-
-            if ($field->getName() === 'email') {
-                $validations[] = $snippet->getValidateEmail($fieldName);
-                $uses[] = $snippet->getUseAs(EmailValidator::class, 'EmailValidator');
-            }
         }
 
         if (count($validations)) {
@@ -393,8 +381,10 @@ class Model extends AbstractComponent
                 continue;
             }
 
-            $type = $this->getPHPType($field->getType());
+            $type      = $this->getPHPType($field->getType());
+            $docType   = $field->isNotNull() ? $type : $type . '|null';
             $fieldName = $this->getFieldName($field->getName());
+
             $attributes[] = $snippet->getAttributes(
                 $type,
                 $useSettersGetters ? 'protected' : 'public',
@@ -405,12 +395,27 @@ class Model extends AbstractComponent
 
             if ($useSettersGetters) {
                 $methodName = Utils::camelize($field->getName(), '_-');
-                $setters[] = $snippet->getSetter($field->getName(), $fieldName, $type, $methodName);
+
+                $setters[] = $snippet->getSetter(
+                    $field->getName(),
+                    $fieldName,
+                    $docType,
+                    $methodName
+                );
 
                 if (isset($this->typeMap[$type])) {
-                    $getters[] = $snippet->getGetterMap($fieldName, $type, $methodName, $this->typeMap[$type]);
+                    $getters[] = $snippet->getGetterMap(
+                        $fieldName,
+                        $docType,
+                        $methodName,
+                        $this->typeMap[$type]
+                    );
                 } else {
-                    $getters[] = $snippet->getGetter($fieldName, $type, $methodName);
+                    $getters[] = $snippet->getGetter(
+                        $fieldName,
+                        $docType,
+                        $methodName
+                    );
                 }
             }
         }
@@ -426,19 +431,6 @@ class Model extends AbstractComponent
             $initCode = $snippet->getInitialize($initialize);
         }
 
-        $license = '';
-        if (file_exists('license.txt')) {
-            $license = trim(file_get_contents('license.txt')) . PHP_EOL . PHP_EOL;
-        }
-
-        if (!$alreadyFind) {
-            $methodRawCode[] = $snippet->getModelFind($this->modelOptions->getOption('className'));
-        }
-
-        if (!$alreadyFindFirst) {
-            $methodRawCode[] = $snippet->getModelFindFirst($this->modelOptions->getOption('className'));
-        }
-
         $content = join('', $attributes);
 
         if ($useSettersGetters) {
@@ -450,12 +442,15 @@ class Model extends AbstractComponent
             $content .= $methodCode;
         }
 
-        $classDoc = '';
-        if ($genDocMethods) {
-            $classDoc = $snippet->getClassDoc($this->modelOptions->getOption('className'), $namespace);
-        }
+        $classDoc = $snippet->getClassDoc(
+            $this->modelOptions->getOption('className'),
+            $namespace,
+            $extends,
+            $genDocMethods
+        );
 
-        if ($this->modelOptions->hasOption('mapColumn') &&
+        if (
+            $this->modelOptions->hasOption('mapColumn') &&
             $this->modelOptions->getOption('mapColumn') &&
             !$alreadyColumnMapped
         ) {
@@ -480,8 +475,7 @@ class Model extends AbstractComponent
             $content,
             $classDoc,
             $abstract,
-            $extends,
-            $license
+            $extends
         );
 
         if (file_exists($modelPath) && !is_writable($modelPath)) {
@@ -595,7 +589,7 @@ class Model extends AbstractComponent
         if (!isset($this->modelOptions->getOption('config')->database->adapter)) {
             throw new InvalidParameterException(
                 "Adapter was not found in the config. " .
-                "Please specify a config variable [database][adapter]"
+                    "Please specify a config variable [database][adapter]"
             );
         }
     }
@@ -671,13 +665,16 @@ class Model extends AbstractComponent
             case Column::TYPE_MEDIUMINTEGER:
             case Column::TYPE_BIGINTEGER:
             case Column::TYPE_BIT:
-                return 'integer';
+                return 'int';
+
             case Column::TYPE_DECIMAL:
             case Column::TYPE_FLOAT:
             case Column::TYPE_DOUBLE:
-                return 'double';
+                return 'float';
+
             case Column::TYPE_BOOLEAN:
-                return 'boolean';
+                return 'bool';
+
             case Column::TYPE_DATE:
             case Column::TYPE_DATETIME:
             case Column::TYPE_TIME:
