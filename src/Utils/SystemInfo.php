@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -12,12 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\DevTools\Utils;
 
+use Composer\InstalledVersions;
 use Phalcon\DevTools\Version;
 use Phalcon\Di\Injectable;
 use Phalcon\Support\Registry;
 use Phalcon\Mvc\Url;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\support\Version as PhVersion;
+use Phalcon\Support\Version as PhVersion;
 
 /**
  * @property Registry $registry
@@ -57,9 +59,20 @@ class SystemInfo extends Injectable
     {
         return [
             'Phalcon DevTools Version' => (new Version())->get(),
-            'Phalcon Version' => (new PhVersion())->get(),
+            'Phalcon Version' => $this->getPhalconVersion(),
             'AdminLTE Version' => '3.0.1',
         ];
+    }
+
+    private function getPhalconVersion(): string
+    {
+        $version = InstalledVersions::getPrettyVersion('phalcon/phalcon');
+
+        if (null !== $version) {
+            return ltrim($version, 'v');
+        }
+
+        return (new PhVersion())->get();
     }
 
     public function getEnvironment(): array
