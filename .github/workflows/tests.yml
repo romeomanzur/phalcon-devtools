@@ -1,155 +1,190 @@
-on: [ push, pull_request ]
+name: Tests
 
-name: "Tests"
+on:
+  push:
+  pull_request:
 
 jobs:
   run-tests:
-    name: PHP ${{ matrix.php-versions }}
+    name: PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
 
-    env:
-      extensions: mbstring, intl, json, zip, phalcon-5.2.0, mysql, pgsql, xdebug-2.9.8
-      key: cache-v2.0~19.03.2020
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '8.2'
+          - '8.3'
+          - '8.4'
 
     services:
       mysql:
         image: mysql:5.7
         env:
           MYSQL_DATABASE: devtools
+          MYSQL_USER: devtools
+          MYSQL_PASSWORD: password
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
       postgres:
-        image: postgres:10.8
-        ports:
-          - 5432/tcp
+        image: postgres:13
         env:
           POSTGRES_DB: devtools
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+          POSTGRES_USER: devtools
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd="pg_isready -U devtools -d devtools"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
-    strategy:
-      fail-fast: false
-      matrix:
-        php-versions: [ '7.4', '8.0', '8.1', '8.2' ]
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Setup cache environment
-        id: cache-env
-        uses: shivammathur/cache-extensions@v1
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: ${{ env.extensions }}
-          key: ${{ env.key }}
-
-      - name: Cache extensions
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.cache-env.outputs.dir }}
-          key: ${{ steps.cache-env.outputs.key }}
-          restore-keys: ${{ steps.cache-env.outputs.key }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: ${{ env.extensions }}
-          tools: pecl
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl, zip, pdo_mysql, pdo_pgsql
+          coverage: xdebug
+          tools: composer:v2
 
-      - name: Get Composer Cache Directory
+      - name: Get Composer cache directory
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
 
-      - name: Cache composer dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php-version }}-composer-
+            ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: |
-          composer install --prefer-dist --no-suggest
-          composer require --dev phpstan/phpstan
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Initialise DataBase
+      - name: Initialise databases
         env:
-          MYSQL_DB_PASSWORD: 'root'
           MYSQL_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          MYSQL_DB_PASSWORD: root
           POSTGRES_DB_PORT: ${{ job.services.postgres.ports['5432'] }}
+          PGPASSWORD: password
         run: bash tests/_ci/setup_dbs_github.sh
 
-      - name: Symbolic link Phalcon devtools
-        run: sudo ln -s "$(pwd)/phalcon" /usr/local/bin/phalcon
+      - name: Install Phalcon DevTools command
+        run: sudo ln -sf "$(pwd)/phalcon" /usr/local/bin/phalcon
 
-      - name: Init Webtools and add ports in database setup
+      - name: Initialise WebTools
         env:
-          MYSQL_DB_PASSWORD: 'root'
+          MYSQL_DB_HOST: 127.0.0.1
+          MYSQL_DB_USERNAME: devtools
+          MYSQL_DB_PASSWORD: password
+          MYSQL_DB_NAME: devtools
           MYSQL_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
+          POSTGRES_DB_HOST: 127.0.0.1
+          POSTGRES_DB_USERNAME: devtools
+          POSTGRES_DB_PASSWORD: password
+          POSTGRES_DB_NAME: devtools
           POSTGRES_DB_PORT: ${{ job.services.postgres.ports['5432'] }}
         run: |
           rm -rf webtools
           phalcon project --name=webtools
-          sed -i "s/database->charset/database->charset,\n\t\t'port'     => \$config->database->port/g" webtools/app/config/services.php
+          cd webtools
+          composer install --prefer-dist --no-interaction --no-progress
+          cd ..
+          perl -0pi -e "s/'host'\s*=>\s*'[^']*'/'host'        => '127.0.0.1'/; s/'username'\s*=>\s*'[^']*'/'username'    => 'devtools'/; s/'password'\s*=>\s*'[^']*'/'password'    => 'password'/; s/'dbname'\s*=>\s*'[^']*'/'dbname'      => 'devtools'/" webtools/app/config/config.php
+          perl -0pi -e "s/'charset'\s*=>\s*'utf8',/'charset'     => 'utf8',\n        'port'        => ${MYSQL_DB_PORT},/" webtools/app/config/config.php
+          sed -i "s/database->charset/database->charset,\n                'port'     => \$config->database->port/g" webtools/app/config/services.php
           cd webtools
           phalcon webtools enable
-          phalcon serve &
+          phalcon serve > /tmp/phalcon-webtools.log 2>&1 &
+          cd ..
+          for i in {1..30}; do if curl -fsS http://127.0.0.1:8000/ >/dev/null; then exit 0; fi; sleep 1; done
+          cat /tmp/phalcon-webtools.log
+          exit 1
 
       - name: Setup tests
+        env:
+          MYSQL_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          POSTGRES_DB_PORT: ${{ job.services.postgres.ports['5432'] }}
         run: |
-          cp tests/.env.test .env
-
-          sed -i "s/MYSQL_DB_PORT=3306/MYSQL_DB_PORT=$MYSQL_DB_PORT/g" .env
-          sed -i "s/MYSQL_DB_PASSWORD=''/MYSQL_DB_PASSWORD='$MYSQL_DB_PASSWORD'/g" .env
-          sed -i "s/POSTGRES_DB_PORT=5432/POSTGRES_DB_PORT=$POSTGRES_DB_PORT/g" .env
-
-          mkdir .phalcon
+          sed -i "s/CODECEPTION_URL=nginx/CODECEPTION_URL=127.0.0.1/; s/CODECEPTION_PORT=80/CODECEPTION_PORT=8000/; s/MYSQL_DB_HOST=mysql/MYSQL_DB_HOST=127.0.0.1/; s/MYSQL_DB_PORT=3306/MYSQL_DB_PORT=${MYSQL_DB_PORT}/" tests/.env.test
+          echo "MYSQL_DB_HOST=127.0.0.1" >> "$GITHUB_ENV"
+          echo "MYSQL_DB_USERNAME=devtools" >> "$GITHUB_ENV"
+          echo "MYSQL_DB_PASSWORD=password" >> "$GITHUB_ENV"
+          echo "MYSQL_DB_NAME=devtools" >> "$GITHUB_ENV"
+          echo "MYSQL_DB_PORT=${MYSQL_DB_PORT}" >> "$GITHUB_ENV"
+          echo "POSTGRES_DB_HOST=127.0.0.1" >> "$GITHUB_ENV"
+          echo "POSTGRES_DB_USERNAME=devtools" >> "$GITHUB_ENV"
+          echo "POSTGRES_DB_PASSWORD=password" >> "$GITHUB_ENV"
+          echo "POSTGRES_DB_NAME=devtools" >> "$GITHUB_ENV"
+          echo "POSTGRES_DB_PORT=${POSTGRES_DB_PORT}" >> "$GITHUB_ENV"
+          mkdir -p .phalcon
           vendor/bin/codecept build
           vendor/bin/phpcs
 
-      - name: Run test suites
-        env:
-          MYSQL_DB_PASSWORD: 'root'
-          MYSQL_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          POSTGRES_DB_PORT: ${{ job.services.postgres.ports['5432'] }}
-        if: success()
-        run: |
-          vendor/bin/codecept run --ext DotReporter acceptance -g mysql --env mysql
-          vendor/bin/codecept run --ext DotReporter acceptance -g pgsql --env pgsql
-          vendor/bin/codecept run --ext DotReporter acceptance -g common --coverage-xml=coverage-common-${{ matrix.php-versions }}.xml
-          vendor/bin/codecept run --ext DotReporter unit --coverage-xml=coverage-unit-${{ matrix.php-versions }}.xml
-          vendor/bin/codecept run --ext DotReporter functional --coverage-xml=coverage-functional-${{ matrix.php-versions }}.xml
-          vendor/bin/codecept run --ext DotReporter console --coverage-xml=coverage-console-${{ matrix.php-versions }}.xml
+      - name: Run MySQL acceptance tests
+        run: vendor/bin/codecept run --ext DotReporter acceptance -g mysql --env mysql
 
-      - name: If fail - Check Config file
-        env:
-          MYSQL_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          POSTGRES_DB_PORT: ${{ job.services.postgres.ports['5432'] }}
+      - name: Run PostgreSQL acceptance tests
+        run: vendor/bin/codecept run --ext DotReporter acceptance -g pgsql --env pgsql
+
+      - name: Run common acceptance tests
+        run: vendor/bin/codecept run --ext DotReporter acceptance -g common --coverage-xml=coverage-common-${{ matrix.php-version }}.xml
+
+      - name: Run unit tests
+        run: vendor/bin/codecept run --ext DotReporter unit --coverage-xml=coverage-unit-${{ matrix.php-version }}.xml
+
+      - name: Run functional tests
+        run: vendor/bin/codecept run --ext DotReporter functional --coverage-xml=coverage-functional-${{ matrix.php-version }}.xml
+
+      - name: Run console tests
+        run: vendor/bin/codecept run --ext DotReporter console --coverage-xml=coverage-console-${{ matrix.php-version }}.xml
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse
+
+      - name: Psalm
+        run: vendor/bin/psalm --threads=1
+
+      - name: Debug failed build
         if: failure()
         run: |
-          cat webtools/app/config/config.php
-          cat webtools/app/config/services.php
-          echo "<?php print_r(include('webtools/app/config/config.php')) ?>" > content_config.php
-          php content_config.php
-          php tests/debug.php
+          echo "=== WebTools config ==="
+          cat webtools/app/config/config.php || true
+          echo "=== WebTools services ==="
+          cat webtools/app/config/services.php || true
+          echo "=== WebTools server ==="
+          cat /tmp/phalcon-webtools.log || true
+          echo "=== PHP ==="
+          php -v
+          echo "=== Composer packages ==="
+          composer show -D || true
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Codeception logs
         if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          name: Codeception Logs
+          name: codeception-logs-php-${{ matrix.php-version }}
           path: tests/_output
-
-      #- name: Check psalm
-      #  run: vendor/bin/psalm --show-info=false
-
-      #- name: Check phpstan
-      #  run: vendor/bin/phpstan analyse -l 5 -c phpstan.neon src -v
+          if-no-files-found: ignore
 
       - name: Upload coverage to Codecov
         if: success()
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v5
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          file: ./tests/_output/coverage-*.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./tests/_output/coverage-common-${{ matrix.php-version }}.xml,./tests/_output/coverage-unit-${{ matrix.php-version }}.xml,./tests/_output/coverage-functional-${{ matrix.php-version }}.xml,./tests/_output/coverage-console-${{ matrix.php-version }}.xml

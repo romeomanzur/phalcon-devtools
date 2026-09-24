@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.18.0@536dd6236b39a5115385b0307b42d6d1ad431a02">
+  <file src="src/Access/Manager.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[beforeDispatch]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Access/Policy/Ip.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function isAllowedAccess(string $resourceName, ?array $data = null): bool]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Bootstrap.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getHostName]]></code>
+      <code><![CDATA[getMode]]></code>
+      <code><![CDATA[getPtoolsIp]]></code>
+      <code><![CDATA[run]]></code>
+      <code><![CDATA[setBasePath]]></code>
+      <code><![CDATA[setHostName]]></code>
+      <code><![CDATA[setMode]]></code>
+      <code><![CDATA[setPtoolsIp]]></code>
+      <code><![CDATA[setPtoolsPath]]></code>
+      <code><![CDATA[setTemplatesPath]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedConstant>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[ENV_TESTING]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Builder/Component/AbstractComponent.php">
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[bool]]></code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/Builder/Component/AllModels.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build(): void]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Builder/Component/Controller.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build()]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Builder/Component/Model.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build(): void]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Builder/Component/Module.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build(): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedMethod>
+      <code><![CDATA[createConfig]]></code>
+      <code><![CDATA[createModule]]></code>
+    </UnusedMethod>
+  </file>
+  <file src="src/Builder/Component/Project.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build()]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Builder/Component/Scaffold.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build(): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedForeachValue>
+      <code><![CDATA[$dataType]]></code>
+      <code><![CDATA[$dataType]]></code>
+    </UnusedForeachValue>
+  </file>
+  <file src="src/Builder/Project/Cli.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build(): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedMethod>
+      <code><![CDATA[createBootstrapFiles]]></code>
+      <code><![CDATA[createConfig]]></code>
+      <code><![CDATA[createDefaultTasks]]></code>
+      <code><![CDATA[createLauncher]]></code>
+    </UnusedMethod>
+  </file>
+  <file src="src/Builder/Project/Micro.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedMethod>
+      <code><![CDATA[createBootstrapFile]]></code>
+      <code><![CDATA[createConfig]]></code>
+      <code><![CDATA[createHtaccessFiles]]></code>
+      <code><![CDATA[createIndexViewFiles]]></code>
+    </UnusedMethod>
+  </file>
+  <file src="src/Builder/Project/Modules.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedMethod>
+      <code><![CDATA[createBootstrapFiles]]></code>
+      <code><![CDATA[createConfig]]></code>
+      <code><![CDATA[createControllerBase]]></code>
+      <code><![CDATA[createControllerFile]]></code>
+      <code><![CDATA[createDefaultTasks]]></code>
+      <code><![CDATA[createHtaccessFiles]]></code>
+      <code><![CDATA[createIndexViewFiles]]></code>
+      <code><![CDATA[createModules]]></code>
+    </UnusedMethod>
+  </file>
+  <file src="src/Builder/Project/ProjectAware.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[createHtrouterFile]]></code>
+      <code><![CDATA[createHtrouterFile]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Builder/Project/ProjectBuilder.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Builder/Project/Simple.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function build()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedMethod>
+      <code><![CDATA[createBootstrapFiles]]></code>
+      <code><![CDATA[createComposerFile]]></code>
+      <code><![CDATA[createConfig]]></code>
+      <code><![CDATA[createControllerBase]]></code>
+      <code><![CDATA[createControllerFile]]></code>
+      <code><![CDATA[createHtaccessFiles]]></code>
+      <code><![CDATA[createIndexViewFiles]]></code>
+    </UnusedMethod>
+  </file>
+  <file src="src/Commands/Builtin/AllModels.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AllModels]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Console.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canBeExternal(): bool]]></code>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters)]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Console]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Controller.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters)]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Controller]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Enumerate.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canBeExternal(): bool]]></code>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Enumerate]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Info.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canBeExternal(): bool]]></code>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters)]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Info]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Migration.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Migration]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Model.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Model]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Module.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canBeExternal(): bool]]></code>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters): void]]></code>
+    </MissingOverrideAttribute>
+    <UndefinedConstant>
+      <code><![CDATA[TEMPLATE_PATH]]></code>
+    </UndefinedConstant>
+    <UnusedClass>
+      <code><![CDATA[Module]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Project.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canBeExternal(): bool]]></code>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters)]]></code>
+    </MissingOverrideAttribute>
+    <UndefinedConstant>
+      <code><![CDATA[TEMPLATE_PATH]]></code>
+    </UndefinedConstant>
+    <UnusedClass>
+      <code><![CDATA[Project]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Scaffold.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters)]]></code>
+    </MissingOverrideAttribute>
+    <UndefinedConstant>
+      <code><![CDATA[TEMPLATE_PATH]]></code>
+    </UndefinedConstant>
+    <UnusedClass>
+      <code><![CDATA[Scaffold]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Serve.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Serve]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Builtin/Webtools.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCommands(): array]]></code>
+      <code><![CDATA[public function getHelp(): void]]></code>
+      <code><![CDATA[public function getPossibleParams(): array]]></code>
+      <code><![CDATA[public function getRequiredParams(): int]]></code>
+      <code><![CDATA[public function run(array $parameters): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Webtools]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/Command.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function canBeExternal(): bool]]></code>
+      <code><![CDATA[public function hasIdentifier($identifier): bool]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getEventsManager]]></code>
+      <code><![CDATA[getOptions]]></code>
+      <code><![CDATA[setEncoding]]></code>
+      <code><![CDATA[setEventsManager]]></code>
+      <code><![CDATA[setScript]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$encoding]]></code>
+    </PossiblyUnusedProperty>
+    <UnusedForeachValue>
+      <code><![CDATA[$description]]></code>
+      <code><![CDATA[$description]]></code>
+    </UnusedForeachValue>
+  </file>
+  <file src="src/Commands/CommandsInterface.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getCommands]]></code>
+      <code><![CDATA[getHelp]]></code>
+      <code><![CDATA[getRequiredParams]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[mixed]]></code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/Commands/CommandsListener.php">
+    <PossiblyUnusedParam>
+      <code><![CDATA[$event]]></code>
+    </PossiblyUnusedParam>
+    <UnusedClass>
+      <code><![CDATA[CommandsListener]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Commands/DotPhalconMissingException.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function promptResolution(): bool]]></code>
+      <code><![CDATA[public function resolve(): bool]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[scanPathMessage]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[bool]]></code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/Commands/ISelfHealingException.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[promptResolution]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Error/AppError.php">
+    <PossiblyUnusedParam>
+      <code><![CDATA[$args]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Error/ErrorHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[customErrorHandler]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedConstant>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[ENV_DEVELOPMENT]]></code>
+      <code><![CDATA[ENV_TESTING]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Exception/ProviderException.php">
+    <UnusedClass>
+      <code><![CDATA[ProviderException]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exception/ReadOnlyParameterException.php">
+    <UnusedClass>
+      <code><![CDATA[ReadOnlyParameterException]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/FactoryOptions.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getOptions]]></code>
+      <code><![CDATA[setOptions]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Generator/Snippet.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getAttributes]]></code>
+      <code><![CDATA[getClass]]></code>
+      <code><![CDATA[getClassDoc]]></code>
+      <code><![CDATA[getColumnDefinition]]></code>
+      <code><![CDATA[getColumnMap]]></code>
+      <code><![CDATA[getGetter]]></code>
+      <code><![CDATA[getGetterMap]]></code>
+      <code><![CDATA[getIndexDefinition]]></code>
+      <code><![CDATA[getInitialize]]></code>
+      <code><![CDATA[getMigrationAfterCreateTable]]></code>
+      <code><![CDATA[getMigrationBatchDelete]]></code>
+      <code><![CDATA[getMigrationBatchInsert]]></code>
+      <code><![CDATA[getMigrationDown]]></code>
+      <code><![CDATA[getMigrationMorph]]></code>
+      <code><![CDATA[getMigrationUp]]></code>
+      <code><![CDATA[getReferenceDefinition]]></code>
+      <code><![CDATA[getRelation]]></code>
+      <code><![CDATA[getRelationOptions]]></code>
+      <code><![CDATA[getSetter]]></code>
+      <code><![CDATA[getThisMethod]]></code>
+      <code><![CDATA[getUse]]></code>
+      <code><![CDATA[getUseAs]]></code>
+      <code><![CDATA[getValidateInclusion]]></code>
+      <code><![CDATA[getValidationEnd]]></code>
+      <code><![CDATA[getValidationsMethod]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Mvc/Controller/Base.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[onConstruct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Mvc/Dispatcher/ErrorHandler.php">
+    <UndefinedConstant>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[ENV_PRODUCTION]]></code>
+    </UndefinedConstant>
+    <UnusedClass>
+      <code><![CDATA[ErrorHandler]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Mvc/View/Engine/Volt/Extension/Php.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[compileFunction]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Mvc/View/NotFoundListener.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[notFoundView]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$view]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Options/OptionsAware.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getOption($key)]]></code>
+      <code><![CDATA[public function getOptions(): array]]></code>
+      <code><![CDATA[public function getValidOptionOrDefault($key, $defaultOption = '')]]></code>
+      <code><![CDATA[public function hasOption($key): bool]]></code>
+      <code><![CDATA[public function setOption($key, $option): void]]></code>
+      <code><![CDATA[public function setOptions(array $options): void]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[setValidOptionOrDefaultValue]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Providers/AccessManagerProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/AnnotationsProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/AssetsProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/AssetsResourceProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/ConfigProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+    <UndefinedConstant>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[ENV_PRODUCTION]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Providers/DataCacheProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/DatabaseProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/DbUtilsProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/DispatcherProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/EventsManagerProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/FileSystemProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/FlashSessionProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/LoggerProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/ModelsCacheProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/RegistryProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+    <UndefinedConstant>
+      <code><![CDATA[DS]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Providers/RouterProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/SessionProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/SystemInfoProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/TagProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/UrlProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/ViewCacheProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/ViewProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Providers/VoltProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function register(DiInterface $di): void]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$di]]></code>
+    </ParamNameMismatch>
+    <UndefinedConstant>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[ENV_DEVELOPMENT]]></code>
+      <code><![CDATA[ENV_DEVELOPMENT]]></code>
+    </UndefinedConstant>
+    <UnnecessaryVarAnnotation>
+      <code><![CDATA[Config]]></code>
+    </UnnecessaryVarAnnotation>
+  </file>
+  <file src="src/Resources/AssetsResource.php">
+    <UndefinedConstant>
+      <code><![CDATA[PTOOLSPATH]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Script.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getEventsManager]]></code>
+      <code><![CDATA[loadUserScripts]]></code>
+      <code><![CDATA[run]]></code>
+      <code><![CDATA[setEventsManager]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Utils/FsUtils.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[isAbsolute]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedConstant>
+      <code><![CDATA[DS]]></code>
+      <code><![CDATA[DS]]></code>
+      <code><![CDATA[DS]]></code>
+      <code><![CDATA[DS]]></code>
+      <code><![CDATA[DS]]></code>
+      <code><![CDATA[DS]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Utils/SystemInfo.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[get]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Validation/Validator/Namespaces.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate(Validation $validation, $field): bool]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Version.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getVersion(): array]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Web/Tools.php">
+    <UndefinedConstant>
+      <code><![CDATA[PTOOLSPATH]]></code>
+      <code><![CDATA[TEMPLATE_PATH]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Web/Tools/Controllers/ControllersController.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function initialize()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[ControllersController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Web/Tools/Controllers/ErrorController.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function setCss()]]></code>
+      <code><![CDATA[protected function setJs()]]></code>
+      <code><![CDATA[public function initialize()]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[route400Action]]></code>
+      <code><![CDATA[route403Action]]></code>
+      <code><![CDATA[route404Action]]></code>
+      <code><![CDATA[route500Action]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedConstant>
+      <code><![CDATA[APPLICATION_ENV]]></code>
+      <code><![CDATA[ENV_PRODUCTION]]></code>
+      <code><![CDATA[ENV_STAGING]]></code>
+    </UndefinedConstant>
+  </file>
+  <file src="src/Web/Tools/Controllers/IndexController.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function initialize()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[IndexController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Web/Tools/Controllers/MigrationsController.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function initialize()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MigrationsController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Web/Tools/Controllers/ModelsController.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function initialize()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[ModelsController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Web/Tools/Controllers/ScaffoldController.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function initialize()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[ScaffoldController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Web/Tools/Controllers/SystemInfoController.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function initialize()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[SystemInfoController]]></code>
+    </UnusedClass>
+  </file>
+</files>
