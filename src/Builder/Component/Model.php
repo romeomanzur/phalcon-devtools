@@ -163,7 +163,11 @@ class Model extends AbstractComponent
 
         $fields = $db->describeColumns($table, $schema);
         $referenceList = $this->getReferenceList($schema, $db);
+        $relations = [];
 
+        /**
+         * Reverse relations: other tables reference this model.
+         */
         foreach ($referenceList as $tableName => $references) {
             foreach ($references as $reference) {
                 if ($reference->getReferencedTable() !== $this->modelOptions->getOption('name')) {
@@ -171,32 +175,83 @@ class Model extends AbstractComponent
                 }
 
                 $entityNamespace = $this->modelOptions->hasOption('namespace')
-                    ? $this->modelOptions->getOption('namespace') . "\\" : '';
+                    ? $this->modelOptions->getOption('namespace') . '\\'
+                    : '';
 
                 $refColumns = $reference->getReferencedColumns();
-                $columns = $reference->getColumns();
-                $initialize[] = $snippet->getRelation(
-                    'hasMany',
-                    $this->getFieldName($refColumns[0]),
-                    $entityNamespace . $helper->camelize($tableName, '_-'),
-                    $this->getFieldName($columns[0]),
-                    "['alias' => '" . $helper->camelize($tableName, '_-') . "']"
-                );
+                $columns    = $reference->getColumns();
+
+                $baseAlias = $helper->camelize($tableName, '_-');
+
+                $relations[] = [
+                    'type'          => 'hasMany',
+                    'field'         => $this->getFieldName($refColumns[0]),
+                    'entity'        => $entityNamespace . $helper->camelize($tableName, '_-'),
+                    'relatedField'  => $this->getFieldName($columns[0]),
+                    'baseAlias'     => $baseAlias,
+
+                    // FK from the referencing table.
+                    // Example: games.away_team_id
+                    'roleField'     => $columns[0],
+
+                    // The FK points to the current table.
+                    // Example: teams
+                    'roleTable'     => $this->modelOptions->getOption('name'),
+                ];
             }
         }
 
-        foreach ($db->describeReferences($this->modelOptions->getOption('name'), $schema) as $reference) {
+        /**
+         * Direct relations: this model references other tables.
+         */
+        foreach (
+            $db->describeReferences(
+                $this->modelOptions->getOption('name'),
+                $schema
+            ) as $reference
+        ) {
             $entityNamespace = $this->modelOptions->hasOption('namespace')
-                ? $this->modelOptions->getOption('namespace') : '';
+                ? $this->modelOptions->getOption('namespace')
+                : '';
 
             $refColumns = $reference->getReferencedColumns();
-            $columns = $reference->getColumns();
+            $columns    = $reference->getColumns();
+
+            $referencedTable = $reference->getReferencedTable();
+            $baseAlias       = $helper->camelize($referencedTable, '_-');
+
+            $relations[] = [
+                'type'          => 'belongsTo',
+                'field'         => $this->getFieldName($columns[0]),
+                'entity'        => $this->getEntityClassName(
+                    $reference,
+                    $entityNamespace
+                ),
+                'relatedField'  => $this->getFieldName($refColumns[0]),
+                'baseAlias'     => $baseAlias,
+
+                // FK from the current table.
+                // Example: games.home_team_id
+                'roleField'     => $columns[0],
+
+                // The FK points to this table.
+                // Example: teams
+                'roleTable'     => $referencedTable,
+            ];
+        }
+
+        /**
+         * Resolve duplicate aliases before generating initialize().
+         */
+        $relations = $this->resolveRelationAliases($relations);
+
+        foreach ($relations as $relation) {
             $initialize[] = $snippet->getRelation(
-                'belongsTo',
-                $this->getFieldName($columns[0]),
-                $this->getEntityClassName($reference, $entityNamespace),
-                $this->getFieldName($refColumns[0]),
-                "['alias' => '" . $helper->camelize($reference->getReferencedTable(), '_-') . "']"
+                $relation['type'],
+                $relation['field'],
+                $relation['entity'],
+                $relation['relatedField'],
+                "['alias' => '" . $relation['alias'] . "']"
             );
         }
 
@@ -595,6 +650,92 @@ class Model extends AbstractComponent
     }
 
     /**
+     * Resolve relation aliases while preserving the historical DevTools alias
+     * whenever a canonical relation exists.
+     *
+     * Examples:
+     *
+     * team_id
+     *     => Teams
+     *
+     * home_team_id
+     * away_team_id
+     *     => TeamsHome
+     *     => TeamsAway
+     *
+     * user_id
+     * user_id_updated
+     *     => Users
+     *     => UsersUpdated
+     *
+     * @param array $relations
+     *
+     * @return array
+     */
+    protected function resolveRelationAliases(array $relations): array
+    {
+        $counts = [];
+
+        foreach ($relations as $relation) {
+            $baseAlias = $relation['baseAlias'];
+
+            $counts[$baseAlias] = ($counts[$baseAlias] ?? 0) + 1;
+        }
+
+        $usedAliases = [];
+
+        foreach ($relations as $index => $relation) {
+            $baseAlias = $relation['baseAlias'];
+
+            /**
+             * No collision: preserve the historical DevTools alias.
+             */
+            if ($counts[$baseAlias] === 1) {
+                $alias = $baseAlias;
+            } else {
+                $role = $this->getRelationRole(
+                    $relation['roleField'],
+                    $relation['roleTable']
+                );
+
+                /**
+                 * A relation without a semantic role is considered the
+                 * canonical relation and keeps the original alias.
+                 *
+                 * user_id => Users
+                 *
+                 * Additional relations receive a semantic suffix:
+                 *
+                 * user_id_updated => UsersUpdated
+                 */
+                $alias = $role !== ''
+                    ? $baseAlias . $role
+                    : $baseAlias;
+            }
+
+            /**
+             * Last-resort protection against collisions.
+             *
+             * This should normally only happen when the database schema
+             * does not provide enough semantic information to distinguish
+             * two relations.
+             */
+            $originalAlias = $alias;
+            $suffix = 2;
+
+            while (isset($usedAliases[$alias])) {
+                $alias = $originalAlias . $suffix;
+                $suffix++;
+            }
+
+            $usedAliases[$alias] = true;
+            $relations[$index]['alias'] = $alias;
+        }
+
+        return $relations;
+    }
+
+    /**
      * @param ReferenceInterface $reference
      * @param string $namespace
      * @return string
@@ -689,5 +830,218 @@ class Model extends AbstractComponent
             default:
                 return 'string';
         }
+    }
+
+    /**
+     * Extract a semantic role from a foreign-key field.
+     *
+     * Examples:
+     *
+     * team_id              + teams => ''
+     * home_team_id         + teams => Home
+     * team_home_id         + teams => Home
+     * team_id_home         + teams => Home
+     *
+     * user_id              + users => ''
+     * user_id_updated      + users => Updated
+     * updated_user_id      + users => Updated
+     *
+     * created_by_user_id   + users => CreatedBy
+     *
+     * @param string $field
+     * @param string $referencedTable
+     *
+     * @return string
+     */
+    protected function getRelationRole(
+        string $field,
+        string $referencedTable
+    ): string {
+        /**
+         * Normalize camelCase/PascalCase before splitting.
+         *
+         * userIdUpdated => user_Id_Updated
+         */
+        $normalizedField = preg_replace(
+            '/([a-z0-9])([A-Z])/',
+            '$1_$2',
+            $field
+        );
+
+        $fieldParts = preg_split(
+            '/[_-]+/',
+            strtolower((string) $normalizedField),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
+
+        if (!$fieldParts) {
+            return '';
+        }
+
+        /**
+         * "id" describes the FK implementation, not its semantic role.
+         *
+         * user_id_updated
+         *     => user, updated
+         *
+         * updated_user_id
+         *     => updated, user
+         */
+        $fieldParts = array_values(
+            array_filter(
+                $fieldParts,
+                static fn(string $part): bool => $part !== 'id'
+            )
+        );
+
+        if (!$fieldParts) {
+            return '';
+        }
+
+        $normalizedTable = preg_replace(
+            '/([a-z0-9])([A-Z])/',
+            '$1_$2',
+            $referencedTable
+        );
+
+        $tableParts = preg_split(
+            '/[_-]+/',
+            strtolower((string) $normalizedTable),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
+
+        if (!$tableParts) {
+            return Utils::camelize(
+                implode('_', $fieldParts),
+                '_-'
+            );
+        }
+
+        /**
+         * Convert the final table token to its probable singular form.
+         *
+         * teams      => team
+         * users      => user
+         * categories => category
+         * statuses   => status
+         */
+        $lastIndex = count($tableParts) - 1;
+
+        $tableParts[$lastIndex] = $this->singularizeRelationToken(
+            $tableParts[$lastIndex]
+        );
+
+        /**
+         * Remove the referenced entity wherever it appears in the FK.
+         *
+         * home_team       - team => home
+         * team_home       - team => home
+         * user_updated    - user => updated
+         * updated_user    - user => updated
+         */
+        $fieldParts = $this->removeRelationEntityParts(
+            $fieldParts,
+            $tableParts
+        );
+
+        if (!$fieldParts) {
+            /**
+             * No remaining parts means this is the canonical FK.
+             *
+             * team_id => ''
+             * user_id => ''
+             */
+            return '';
+        }
+
+        return Utils::camelize(
+            implode('_', $fieldParts),
+            '_-'
+        );
+    }
+
+    /**
+     * Singularize the last token of a table name only for relation-role
+     * detection. This is deliberately conservative and is not intended
+     * to be a general-purpose inflector.
+     */
+    protected function singularizeRelationToken(string $token): string
+    {
+        $length = strlen($token);
+
+        if ($length <= 1) {
+            return $token;
+        }
+
+        if ($length > 3 && str_ends_with($token, 'ies')) {
+            return substr($token, 0, -3) . 'y';
+        }
+
+        if (
+            $length > 3 &&
+            (
+                str_ends_with($token, 'sses') ||
+                str_ends_with($token, 'xes') ||
+                str_ends_with($token, 'zes') ||
+                str_ends_with($token, 'ches') ||
+                str_ends_with($token, 'shes') ||
+                str_ends_with($token, 'ses')
+            )
+        ) {
+            return substr($token, 0, -2);
+        }
+
+        if (
+            $length > 2 &&
+            str_ends_with($token, 's') &&
+            !str_ends_with($token, 'ss')
+        ) {
+            return substr($token, 0, -1);
+        }
+
+        return $token;
+    }
+
+    /**
+     * Remove the referenced entity tokens from the FK tokens.
+     *
+     * @param array $fieldParts
+     * @param array $entityParts
+     *
+     * @return array
+     */
+    protected function removeRelationEntityParts(
+        array $fieldParts,
+        array $entityParts
+    ): array {
+        $fieldCount  = count($fieldParts);
+        $entityCount = count($entityParts);
+
+        if ($entityCount === 0 || $entityCount > $fieldCount) {
+            return $fieldParts;
+        }
+
+        for ($i = 0; $i <= $fieldCount - $entityCount; $i++) {
+            $matches = true;
+
+            for ($j = 0; $j < $entityCount; $j++) {
+                if ($fieldParts[$i + $j] !== $entityParts[$j]) {
+                    $matches = false;
+                    break;
+                }
+            }
+
+            if (!$matches) {
+                continue;
+            }
+
+            array_splice($fieldParts, $i, $entityCount);
+
+            return array_values($fieldParts);
+        }
+
+        return $fieldParts;
     }
 }
