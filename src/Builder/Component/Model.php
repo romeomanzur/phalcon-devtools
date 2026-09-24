@@ -204,11 +204,10 @@ class Model extends AbstractComponent
         /**
          * Direct relations: this model references other tables.
          */
-        foreach (
-            $db->describeReferences(
-                $this->modelOptions->getOption('name'),
-                $schema
-            ) as $reference
+        foreach ($db->describeReferences(
+            $this->modelOptions->getOption('name'),
+            $schema
+        ) as $reference
         ) {
             $entityNamespace = $this->modelOptions->hasOption('namespace')
                 ? $this->modelOptions->getOption('namespace')
@@ -347,8 +346,7 @@ class Model extends AbstractComponent
 
                 foreach ($reflection->getProperties() as $property) {
                     $propertyName = $property->getName();
-                    if (
-                        !empty($possibleFieldsTransformed[$propertyName])
+                    if (!empty($possibleFieldsTransformed[$propertyName])
                         || $property->getDeclaringClass()->getName() !== $fullClassName
                     ) {
                         continue;
@@ -504,8 +502,7 @@ class Model extends AbstractComponent
             $genDocMethods
         );
 
-        if (
-            $this->modelOptions->hasOption('mapColumn') &&
+        if ($this->modelOptions->hasOption('mapColumn') &&
             $this->modelOptions->getOption('mapColumn') &&
             !$alreadyColumnMapped
         ) {
@@ -979,8 +976,7 @@ class Model extends AbstractComponent
             return substr($token, 0, -3) . 'y';
         }
 
-        if (
-            $length > 3 &&
+        if ($length > 3 &&
             (
                 str_ends_with($token, 'sses') ||
                 str_ends_with($token, 'xes') ||
@@ -993,8 +989,7 @@ class Model extends AbstractComponent
             return substr($token, 0, -2);
         }
 
-        if (
-            $length > 2 &&
+        if ($length > 2 &&
             str_ends_with($token, 's') &&
             !str_ends_with($token, 'ss')
         ) {

@@ -234,8 +234,7 @@ class MigrationsController extends Base
             return $this->config;
         }
 
-        if (
-            is_object($this->config)
+        if (is_object($this->config)
             && method_exists($this->config, 'toArray')
         ) {
             $config = $this->config->toArray();
