@@ -13,6 +13,19 @@ services:
     volumes:
       - ./:/app
 
+    environment:
+      MYSQL_DB_HOST: mysql
+      MYSQL_DB_USERNAME: devtools
+      MYSQL_DB_PASSWORD: password
+      MYSQL_DB_NAME: devtools
+      MYSQL_DB_PORT: 3306
+
+      POSTGRES_DB_HOST: postgres
+      POSTGRES_DB_USERNAME: devtools
+      POSTGRES_DB_PASSWORD: password
+      POSTGRES_DB_NAME: devtools
+      POSTGRES_DB_PORT: 5432
+
     depends_on:
       - mysql
       - postgres
@@ -48,7 +61,7 @@ services:
       - ./docker/mysql/config:/etc/mysql/conf.d/
 
   postgres:
-    image: postgis/postgis:13-master
+    image: postgres:13
     restart: unless-stopped
 
     environment:

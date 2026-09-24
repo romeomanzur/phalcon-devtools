@@ -10,11 +10,11 @@ defined('APP_PATH') || define('APP_PATH', BASE_PATH . '/app');
 return new \Phalcon\Config\Config([
     'database' => [
         'adapter'  => 'Postgresql',
-        'host'     => 'localhost',
-        'username' => 'postgres',
-        'password' => '',
-        'dbname'   => 'devtools',
-        'port'     => getenv('POSTGRES_DB_PORT'),
+        'host'     => getenv('POSTGRES_DB_HOST') ?: 'localhost',
+        'username' => getenv('POSTGRES_DB_USERNAME') ?: 'postgres',
+        'password' => getenv('POSTGRES_DB_PASSWORD') ?: '',
+        'dbname'   => getenv('POSTGRES_DB_NAME') ?: 'devtools',
+        'port'     => getenv('POSTGRES_DB_PORT') ?: 5432,
     ],
     'application' => [
         'appDir'         => APP_PATH . '/',

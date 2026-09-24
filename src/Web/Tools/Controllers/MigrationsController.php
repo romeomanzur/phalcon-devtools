@@ -19,6 +19,7 @@ use Phalcon\DevTools\Mvc\Controller\Base;
 use Phalcon\Flash\Session;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Migrations\Migrations;
+use Phalcon\Migrations\Utils\Config as MigrationsConfig;
 use Phalcon\Html\TagFactory;
 
 /**
@@ -43,7 +44,7 @@ class MigrationsController extends Base
         $migrations = [];
 
         if ($migrationsDir = $this->registry->offsetGet('directories')->migrationsDir) {
-            foreach (new DirectoryIterator($migrationsDir) as $index => $version) {
+            foreach (new DirectoryIterator($migrationsDir) as $version) {
                 if ($version->isDot() || !$version->isDir()) {
                     continue;
                 }
@@ -94,15 +95,16 @@ class MigrationsController extends Base
         if ($this->request->isPost()) {
             try {
                 Migrations::generate([
-                    'directory'       => $this->request->getPost('basePath', 'string'),
-                    'tableName'       => $this->request->getPost('tableName', 'string'),
-                    'exportData'      => $this->request->getPost('exportDataType', 'string'),
-                    'migrationsDir'   => $this->request->getPost('migrationsDir', 'string'),
-                    'force'           => $this->request->getPost('force', 'int'),
-                    'noAutoIncrement' => $this->request->getPost('noAi', 'int'),
-                    'config'          => $this->config,
-                    'descr'           => null, // @todo
-                    'version'         => $this->request->getPost('version', 'string') ?: null,
+                    'directory'            => $this->request->getPost('basePath', 'string'),
+                    'tableName'            => $this->request->getPost('tableName', 'string'),
+                    'exportData'           => $this->request->getPost('exportDataType', 'string'),
+                    'exportDataFromTables' => [],
+                    'migrationsDir'        => $this->request->getPost('migrationsDir', 'string'),
+                    'force'                => (bool) $this->request->getPost('force', 'int'),
+                    'noAutoIncrement'      => (bool) $this->request->getPost('noAi', 'int'),
+                    'config'               => $this->getMigrationsConfig(),
+                    'descr'                => null, // @todo
+                    'version'              => $this->request->getPost('version', 'string') ?: null,
                 ]);
 
                 $this->flashSession->success('The migration was generated successfully.');
@@ -155,7 +157,7 @@ class MigrationsController extends Base
             try {
                 Migrations::run(
                     [
-                        'config'        => $this->config,
+                        'config' => $this->getMigrationsConfig(),
                         'directory'     => $this->request->getPost('basePath', 'string'),
                         'tableName'     => '@', // @todo
                         'migrationsDir' => $this->request->getPost('migrationsDir', 'string'),
@@ -220,5 +222,27 @@ class MigrationsController extends Base
         } else {
             return 'None';
         }
+    }
+
+    /**
+     * Convert DevTools application configuration to the configuration
+     * object expected by phalcon/migrations v4.
+     */
+    private function getMigrationsConfig(): MigrationsConfig
+    {
+        if ($this->config instanceof MigrationsConfig) {
+            return $this->config;
+        }
+
+        if (
+            is_object($this->config)
+            && method_exists($this->config, 'toArray')
+        ) {
+            $config = $this->config->toArray();
+        } else {
+            $config = (array) $this->config;
+        }
+
+        return MigrationsConfig::fromArray($config);
     }
 }
