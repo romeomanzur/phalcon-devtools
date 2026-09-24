@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Phalcon\Html\Escaper;
 use Phalcon\Flash\Direct as Flash;
-use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
+use Phalcon\Mvc\Model\MetaData\Memory as MetaDataAdapter;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
