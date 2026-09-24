@@ -10,10 +10,15 @@
 *.iml
 
 # local tests
+
 .local/
 .phalcon/
 dummy/
 default/
+
+# DevTools model generator test fixture
+!tests/_data/model-project/.phalcon/
+!tests/_data/model-project/.phalcon/.gitkeep
 
 # composer
 vendor/
