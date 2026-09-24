@@ -143,7 +143,7 @@ jobs:
         run: vendor/bin/codecept run --ext DotReporter acceptance -g pgsql --env pgsql
 
       - name: Run common acceptance tests
-        run: vendor/bin/codecept run --ext DotReporter acceptance -g common --coverage-xml=coverage-common-${{ matrix.php-version }}.xml
+        run: vendor/bin/codecept run --ext DotReporter acceptance -g common
 
       - name: Run unit tests
         run: vendor/bin/codecept run --ext DotReporter unit --coverage-xml=coverage-unit-${{ matrix.php-version }}.xml
@@ -187,4 +187,4 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/_output/coverage-common-${{ matrix.php-version }}.xml,./tests/_output/coverage-unit-${{ matrix.php-version }}.xml,./tests/_output/coverage-functional-${{ matrix.php-version }}.xml,./tests/_output/coverage-console-${{ matrix.php-version }}.xml
+          files: ./tests/_output/coverage-unit-${{ matrix.php-version }}.xml,./tests/_output/coverage-functional-${{ matrix.php-version }}.xml,./tests/_output/coverage-console-${{ matrix.php-version }}.xml
