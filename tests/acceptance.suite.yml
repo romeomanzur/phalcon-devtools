@@ -9,8 +9,6 @@ modules:
     enabled:
         - PhpBrowser:
             url: 'http://%CODECEPTION_URL%:%CODECEPTION_PORT%'
-            curl:
-                CURLOPT_RETURNTRANSFER: true
         - \Helper\Acceptance
         - Filesystem
     step_decorators: ~

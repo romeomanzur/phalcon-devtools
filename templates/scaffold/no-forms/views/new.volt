@@ -14,9 +14,10 @@
 
 <form action="{{ url('$plural$/create') }}" class="form-horizontal" method="post">
     $captureFields$
+
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            {{ inputSubmit('save', 'Save', ['class': 'btn btn-primary']) }}
+            <input type="submit" name="save" value="Save" class="btn btn-primary">
         </div>
     </div>
 </form>

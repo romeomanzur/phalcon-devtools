@@ -2,7 +2,6 @@
 
 namespace Phalcon\DevTools\Tests\Support\Module;
 
-use Codeception\Specify;
 use Codeception\Test\Unit;
 use UnitTester;
 
@@ -25,7 +24,6 @@ use UnitTester;
  */
 class UnitTest extends Unit
 {
-    use Specify;
 
     /**
      * UnitTester Object

@@ -23,25 +23,28 @@ final class UtilsTest extends UnitTest
      * Tests Utils::camelize
      *
      * @test
-     * @issue  1056
-     * @author Sergii Svyrydenko <sergey.v.sviridenko@gmail.com>
-     * @since  2017-08-02
+     * @issue 1056
      */
-    public function shouldCamelizeString()
+    public function shouldCamelizeString(): void
     {
-        $this->specify(
-            "Method Utils::camelize hasn't returned proper string",
-            function ($string, $expected) {
-                expect($string)->equals($expected);
-            },
-            [
-                'examples' => [
-                    [Utils::camelize('MyFooBar'), 'MyFooBar'],
-                    [Utils::camelize('MyFooBar', '_-'), 'MyFooBar'],
-                    [Utils::camelize('My-Foo_Bar', '-'), 'MyFoo_Bar'],
-                    [Utils::camelize('My-Foo_Bar', '_-'), 'MyFooBar']
-                ]
-            ]
+        $this->assertSame(
+            'MyFooBar',
+            Utils::camelize('MyFooBar')
+        );
+
+        $this->assertSame(
+            'MyFooBar',
+            Utils::camelize('MyFooBar', '_-')
+        );
+
+        $this->assertSame(
+            'MyFoo_Bar',
+            Utils::camelize('My-Foo_Bar', '-')
+        );
+
+        $this->assertSame(
+            'MyFooBar',
+            Utils::camelize('My-Foo_Bar', '_-')
         );
     }
 
@@ -49,26 +52,37 @@ final class UtilsTest extends UnitTest
      * Tests Utils::lowerCamelizeWithDelimiter
      *
      * @test
-     * @issue  1070
-     * @author Sergii Svyrydenko <sergey.v.sviridenko@gmail.com>
-     * @since  2017-08-07
+     * @issue 1070
      */
-    public function shouldCamelizeStringWithDelimiter()
+    public function shouldCamelizeStringWithDelimiter(): void
     {
-        $this->specify(
-            "Method Utils::lowerCamelizeWithDelimiter hasn't returned proper string",
-            function ($string, $expected) {
-                expect($string)->equals($expected);
-            },
-            [
-                'examples' => [
-                    [Utils::lowerCamelizeWithDelimiter('myfoobar'), 'myfoobar'],
-                    [Utils::lowerCamelizeWithDelimiter('myfoobar', '_-'), 'Myfoobar'],
-                    [Utils::lowerCamelizeWithDelimiter('My-Foo_Bar', '_-'), 'MyFooBar'],
-                    [Utils::lowerCamelizeWithDelimiter('my-foo_bar', '_-'), 'MyFooBar'],
-                    [Utils::lowerCamelizeWithDelimiter('my-foo_bar', '_-', true), 'myFooBar']
-                ]
-            ]
+        $this->assertSame(
+            'myfoobar',
+            Utils::lowerCamelizeWithDelimiter('myfoobar')
+        );
+
+        $this->assertSame(
+            'Myfoobar',
+            Utils::lowerCamelizeWithDelimiter('myfoobar', '_-')
+        );
+
+        $this->assertSame(
+            'MyFooBar',
+            Utils::lowerCamelizeWithDelimiter('My-Foo_Bar', '_-')
+        );
+
+        $this->assertSame(
+            'MyFooBar',
+            Utils::lowerCamelizeWithDelimiter('my-foo_bar', '_-')
+        );
+
+        $this->assertSame(
+            'myFooBar',
+            Utils::lowerCamelizeWithDelimiter(
+                'my-foo_bar',
+                '_-',
+                true
+            )
         );
     }
 
@@ -76,47 +90,37 @@ final class UtilsTest extends UnitTest
      * Tests Utils::lowerCamelize
      *
      * @test
-     * @author Sergii Svyrydenko <sergey.v.sviridenko@gmail.com>
-     * @since  2017-08-02
      */
-    public function shouldLowercamelizeString()
+    public function shouldLowercamelizeString(): void
     {
-        $this->specify(
-            "Method Utils::lowerCamelize hasn't returned proper string",
-            function ($string, $expected) {
-                expect($string)->equals($expected);
-            },
-            [
-                'examples' => [
-                    [Utils::lowerCamelize('MyFooBar'), 'myFooBar']
-                ]
-            ]
+        $this->assertSame(
+            'myFooBar',
+            Utils::lowerCamelize('MyFooBar')
         );
     }
 
     /**
-     * Tests (new HelperFactory())->uncamelize
+     * Tests HelperFactory::uncamelize
      *
      * @test
-     * @author Sergii Svyrydenko <sergey.v.sviridenko@gmail.com>
-     * @since  2017-08-02
      */
-    public function shouldUncamelizeString()
+    public function shouldUncamelizeString(): void
     {
         $helper = new HelperFactory();
 
-        $this->specify(
-            "Method (new HelperFactory())->uncamelize hasn't returned proper string",
-            function ($string, $expected) {
-                expect($string)->equals($expected);
-            },
-            [
-                'examples' => [
-                    [$helper->uncamelize('MyFooBar'), 'my_foo_bar'],
-                    [$helper->uncamelize('MyFooBar', '-'), 'my-foo-bar'],
-                    [$helper->uncamelize('MyFooBar', '_'), 'my_foo_bar']
-                ]
-            ]
+        $this->assertSame(
+            'my_foo_bar',
+            $helper->uncamelize('MyFooBar')
+        );
+
+        $this->assertSame(
+            'my-foo-bar',
+            $helper->uncamelize('MyFooBar', '-')
+        );
+
+        $this->assertSame(
+            'my_foo_bar',
+            $helper->uncamelize('MyFooBar', '_')
         );
     }
 }

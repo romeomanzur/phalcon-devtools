@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Phalcon\DevTools\Tests\Unit\Generator;
@@ -25,6 +26,8 @@ final class SnippetTest extends Unit
     {
         $expected = <<<EOD
 <?php
+
+declare(strict_types=1);
 
 namespace Test\DevTools;
 

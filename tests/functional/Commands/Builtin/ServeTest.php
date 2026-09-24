@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\DevTools\Tests\Functional;
+namespace Phalcon\DevTools\Tests\Functional\Commands\Builtin;
 
 use Codeception\Test\Unit;
 use Phalcon\DevTools\Commands\Builtin\Serve;

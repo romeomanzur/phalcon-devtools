@@ -14,11 +14,12 @@
 
 <form action="{{ url('$plural$/save') }}" class="form-horizontal" method="post">
     $captureFields$
-    {{ inputHidden("id", $singular$.$pk$) }}
+
+    <input type="hidden" name="$pk$" value="{{ $singular$.$pk$ }}">
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            {{ inputSubmit('save', 'Save', ['class': 'btn btn-primary']) }}
+            <input type="submit" name="save" value="Save" class="btn btn-primary">
         </div>
     </div>
 </form>

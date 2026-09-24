@@ -20,9 +20,10 @@
 
 <form action="<?= $this->url->get('$plural$/create') ?>" class="form-horizontal" method="post">
     $captureFields$
+
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <?php echo $this->tag->inputSubmit("save", "Save", ['class' => "btn btn-primary"]) ?>
+            <input type="submit" name="save" value="Save" class="btn btn-primary">
         </div>
     </div>
 </form>
