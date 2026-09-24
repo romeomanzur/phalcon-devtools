@@ -57,10 +57,11 @@ class Simple extends ProjectBuilder
      */
     public function build()
     {
-        
+
         $this
             ->buildDirectories()
             ->getVariableValues()
+            ->createComposerFile()
             ->createConfig()
             ->createBootstrapFiles()
             ->createHtaccessFiles()
@@ -171,6 +172,21 @@ class Simple extends ProjectBuilder
     {
         $getFile = $this->options->get('templatePath') . '/project/simple/index.php';
         $putFile = $this->options->get('projectPath') . 'public/index.php';
+        $this->generateFile($getFile, $putFile);
+
+        return $this;
+    }
+
+    /**
+     * Create Composer configuration file.
+     *
+     * @return $this
+     */
+    private function createComposerFile()
+    {
+        $getFile = $this->options->get('templatePath') . '/project/simple/composer.json';
+        $putFile = $this->options->get('projectPath') . 'composer.json';
+
         $this->generateFile($getFile, $putFile);
 
         return $this;

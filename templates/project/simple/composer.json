@@ -1,0 +1,11 @@
+{
+    "name": "phalcon/project",
+    "description": "Phalcon application",
+    "type": "project",
+    "require": {
+        "php": ">=8.2 <9.0",
+        "phalcon/phalcon": "^6.0@RC",
+        "phalcon/phql": "1.0.x-dev",
+        "phalcon/volt": "1.0.x-dev"
+    }
+}

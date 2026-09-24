@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Phalcon\DevTools\Mvc\Controller;
 
-use Phalcon\Assets\Filters\Cssmin;
-use Phalcon\Assets\Filters\Jsmin;
+use Phalcon\Assets\Filters\CssMin;
+use Phalcon\Assets\Filters\JsMin;
 use Phalcon\Assets\Manager;
 use Phalcon\Config\Config;
 use Phalcon\DevTools\Resources\AssetsResource;
@@ -32,7 +32,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Support\Registry;
 use Phalcon\Mvc\Url;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\support\Version as PhVersion;
+use Phalcon\Support\Version as PhVersion;
 
 /**
  * @property Config $config

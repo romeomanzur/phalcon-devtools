@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Phalcon\DevTools\Mvc\Controller;
 
-use Phalcon\Assets\Filters\Cssmin;
-use Phalcon\Assets\Filters\Jsmin;
+use Phalcon\Assets\Filters\CssMin;
+use Phalcon\Assets\Filters\JsMin;
 use Phalcon\Assets\Manager;
 use Phalcon\DevTools\Resources\AssetsResource;
 use Phalcon\DevTools\Version;

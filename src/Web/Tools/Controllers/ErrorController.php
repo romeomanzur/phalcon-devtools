@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Phalcon\DevTools\Web\Tools\Controllers;
 
-use Phalcon\Assets\Filters\Cssmin;
-use Phalcon\Assets\Filters\Jsmin;
+use Phalcon\Assets\Filters\CssMin;
+use Phalcon\Assets\Filters\JsMin;
 use Phalcon\DevTools\Mvc\Controller\Base;
 use Phalcon\DevTools\Version;
 use Phalcon\Html\TagFactory;
