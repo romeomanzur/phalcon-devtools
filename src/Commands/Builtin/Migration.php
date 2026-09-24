@@ -18,6 +18,7 @@ use Phalcon\DevTools\Commands\CommandsException;
 use Phalcon\DevTools\Script\Color;
 use Phalcon\Migrations\Migrations;
 use Phalcon\Migrations\Script\ScriptException;
+use Phalcon\Migrations\Utils\Config as MigrationsConfig;
 use Phalcon\Mvc\Model\Exception;
 
 /**
@@ -72,6 +73,8 @@ class Migration extends Command
         } else {
             $config = $this->getConfig($path);
         }
+
+        $migrationsConfig = MigrationsConfig::fromArray($config->toArray());
 
         $exportDataFromTables= [];
         if ($this->isReceivedOption('exportDataFromTables')) {
@@ -140,7 +143,7 @@ class Migration extends Command
                     'version'         => $this->getOption('version'),
                     'force'           => $this->isReceivedOption('force'),
                     'noAutoIncrement' => $this->isReceivedOption('no-auto-increment'),
-                    'config'          => $config,
+                    'config'          => $migrationsConfig,
                     'descr'           => $this->getOption('descr'),
                     'verbose'         => $this->isReceivedOption('dry'),
                 ]);
@@ -152,7 +155,7 @@ class Migration extends Command
                     'migrationsDir'  => $migrationsDir,
                     'force'          => $this->isReceivedOption('force'),
                     'tsBased'        => $migrationsTsBased,
-                    'config'         => $config,
+                    'config'         => $migrationsConfig,
                     'version'        => $this->getOption('version'),
                     'migrationsInDb' => $migrationsInDb,
                     'verbose'        => $this->isReceivedOption('verbose'),
@@ -165,7 +168,7 @@ class Migration extends Command
                     'migrationsDir'  => $migrationsDir,
                     'force'          => $this->isReceivedOption('force'),
                     'tsBased'        => $migrationsTsBased,
-                    'config'         => $config,
+                    'config'         => $migrationsConfig,
                     'version'        => $this->getOption('version'),
                     'migrationsInDb' => $migrationsInDb,
                 ]);
