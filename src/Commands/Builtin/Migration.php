@@ -76,7 +76,15 @@ class Migration extends Command
 
         $migrationsConfig = MigrationsConfig::fromArray($config->toArray());
 
-        $exportDataFromTables= [];
+        $noAutoIncrement = $migrationsConfig->noAutoIncrement
+            || $this->isReceivedOption('no-auto-increment');
+
+        $descr = $migrationsConfig->descr ?? $this->getOption('descr');
+
+        $skipRefSchema = $migrationsConfig->skipRefSchema;
+        $skipForeignChecks = $migrationsConfig->skipForeignChecks;
+
+        $exportDataFromTables = [];
         if ($this->isReceivedOption('exportDataFromTables')) {
             $exportDataFromTables = explode(',', $this->getOption('exportDataFromTables'));
         } elseif (isset($config['application']['exportDataFromTables'])) {
@@ -135,30 +143,32 @@ class Migration extends Command
         switch ($action) {
             case 'generate':
                 Migrations::generate([
-                    'directory'       => $path,
-                    'tableName'       => $tableName,
-                    'exportData'      => $this->getOption('data'),
-                    'exportDataFromTables'      => $exportDataFromTables,
-                    'migrationsDir'   => $migrationsDir,
-                    'version'         => $this->getOption('version'),
-                    'force'           => $this->isReceivedOption('force'),
-                    'noAutoIncrement' => $this->isReceivedOption('no-auto-increment'),
-                    'config'          => $migrationsConfig,
-                    'descr'           => $this->getOption('descr'),
-                    'verbose'         => $this->isReceivedOption('dry'),
+                    'directory'            => $path,
+                    'tableName'            => $tableName,
+                    'exportData'           => $this->getOption('data'),
+                    'exportDataFromTables' => $exportDataFromTables,
+                    'migrationsDir'        => $migrationsDir,
+                    'version'              => $this->getOption('version'),
+                    'force'                => $this->isReceivedOption('force'),
+                    'noAutoIncrement'      => $noAutoIncrement,
+                    'config'               => $migrationsConfig,
+                    'descr'                => $descr,
+                    'verbose'              => $this->isReceivedOption('dry'),
+                    'skip-ref-schema'      => $skipRefSchema,
                 ]);
                 break;
             case 'run':
                 Migrations::run([
-                    'directory'      => $path,
-                    'tableName'      => $tableName,
-                    'migrationsDir'  => $migrationsDir,
-                    'force'          => $this->isReceivedOption('force'),
-                    'tsBased'        => $migrationsTsBased,
-                    'config'         => $migrationsConfig,
-                    'version'        => $this->getOption('version'),
-                    'migrationsInDb' => $migrationsInDb,
-                    'verbose'        => $this->isReceivedOption('verbose'),
+                    'directory'           => $path,
+                    'tableName'           => $tableName,
+                    'migrationsDir'       => $migrationsDir,
+                    'force'               => $this->isReceivedOption('force'),
+                    'tsBased'             => $migrationsTsBased,
+                    'config'              => $migrationsConfig,
+                    'version'             => $this->getOption('version'),
+                    'migrationsInDb'      => $migrationsInDb,
+                    'verbose'             => $this->isReceivedOption('verbose'),
+                    'skip-foreign-checks' => $skipForeignChecks,
                 ]);
                 break;
             case 'list':
