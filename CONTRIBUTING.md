@@ -1,65 +1,84 @@
 # Contributing to Phalcon Developer Tools
 
-Phalcon Developer Tools is an open source project and a volunteer effort.
-Phalcon Developer Tools welcomes contribution from everyone.
+Phalcon Developer Tools is an open-source project and a volunteer effort.
+
+Contributions from everyone are welcome.
 
 ## Contributions
 
-Contributions to Phalcon Developer Tools should be made in the form of [GitHub pull requests][pr].
-Each pull request will be reviewed by a core contributor (someone with permission to land patches) and either landed in
-the main tree or given feedback for changes that would be required before it can be merged. All contributions should
-follow this format, even those from core contributors.
+Contributions to Phalcon Developer Tools should be submitted as GitHub pull requests.
+
+Each pull request will be reviewed by a project contributor and will either be merged or receive feedback describing any changes required before it can be accepted.
+
+Before starting a significant feature or architectural change, consider discussing the proposal with the Phalcon team first.
 
 ## Questions & Support
 
-*We only accept bug reports, new feature requests and pull requests in GitHub*.
-For questions regarding the usage of the Phalcon Developer Tools or support requests please visit the
-[official forums][forum]. IDE stubs must not be modified manually, if you want to improve them please submit a PR
-to [Phalcon Framework][cphalcon].
+GitHub issues are intended for bug reports and feature requests.
+
+For questions about using Phalcon or Phalcon Developer Tools, please use the official Phalcon Discussions or Discord support channels.
 
 ## Bug Report Checklist
 
-- Make sure you are using the latest released version of Phalcon Framework and Phalcon Developer Tools
-  before submitting a bug report. Bugs in versions older than the latest released one will not be addressed by the
-  core team
+Before submitting a bug report:
 
-- If you have found a bug it is important to add relevant reproducibility information to your issue to allow us 
-  to reproduce the bug and fix it quicker. Add a script, small program or repository providing the necessary code to 
-  make everyone reproduce the issue reported easily. If a bug cannot be reproduced by the development it would be
-  difficult provide corrections and solutions. [Submit Reproducible Test][srt] for more information.
-
-- Be sure that information such as OS, Phalcon Framework and Phalcon Developer Tools versions and PHP version are
-  part of the bug report
-
-- If you're submitting a Segmentation Fault error, we would require a backtrace, please see [Generating a Backtrace][gb]
+- Make sure you are using the latest applicable version of Phalcon Framework and Phalcon Developer Tools.
+- Include enough information to reproduce the issue.
+- Include the operating system, PHP version, Phalcon version and Phalcon DevTools version.
+- Include database type and version when the issue involves database functionality.
+- Provide a minimal reproducer, failing test or small repository whenever possible.
 
 ## Pull Request Checklist
 
-- Don't submit your pull requests to the `master` branch. Branch from the required branch and,
-  if needed, rebase to the proper branch before submitting your pull request.
-  If it doesn't merge cleanly with master you may be asked to rebase your changes
-  
-- Don't put submodule updates, composer.lock, etc in your pull request unless they are to landed commits
+Create your branch from the appropriate source branch for the change. Do not assume that `master` is the correct target branch.
 
-- Make sure that the code you write fits with the general style and coding standards of the [Accepted PHP Standards][psr]
+Before submitting a pull request:
+
+- Rebase your branch when necessary.
+- Keep the change focused on the purpose of the pull request.
+- Add or update automated tests for behavior changes and bug fixes.
+- Update documentation when behavior or requirements change.
+- Update `CHANGELOG.md` when appropriate.
+- Avoid unrelated dependency or lock-file changes.
+- Make sure the code follows the project's coding standards.
+- Run the relevant test suites and static-analysis tools.
+
+The Phalcon contribution guidelines also require disclosure when AI coding assistants materially contribute to a change. Review the current Phalcon AI Development guidelines before submitting your pull request.
+
+## Development Checks
+
+Run the available Codeception test suites:
+
+```bash
+vendor/bin/codecept run
+```
+
+Run PHPStan:
+
+```bash
+vendor/bin/phpstan analyse
+```
+
+Run Psalm:
+
+```bash
+vendor/bin/psalm --threads=1
+```
+
+Run PHP_CodeSniffer:
+
+```bash
+vendor/bin/phpcs
+```
 
 ## Getting Support
 
-If you have a question about how to use Phalcon, please see the [support page][support].
+For questions about using Phalcon, use the official Phalcon Discussions or Discord support channels.
 
 ## Requesting Features
 
-If you have a change or new feature in mind, please fill an [NFR][nfr].
+For significant new functionality, review the current Phalcon New Feature Request guidelines before implementation.
 
-Thanks! <br />
+Thanks!
+
 Phalcon Team
-
-
-[pr]: https://help.github.com/articles/about-pull-requests/
-[forum]: https://forum.phalcon.io/
-[cphalcon]: https://github.com/phalcon/cphalcon
-[srt]: https://docs.phalcon.io/en/latest/reproducible-tests
-[gb]: https://docs.phalcon.io/en/latest/generating-backtrace
-[support]: https://phalcon.io/en/support/
-[nfr]: https://docs.phalcon.io/en/latest/new-feature-request
-[psr]: https://www.php-fig.org/psr/

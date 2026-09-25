@@ -1,183 +1,280 @@
-# Phalcon Devtools
+# Phalcon DevTools
 
-[![codecov](https://codecov.io/gh/phalcon/phalcon-devtools/branch/4.0.x/graph/badge.svg)](https://codecov.io/gh/phalcon/phalcon-devtools)
+[![Tests](https://github.com/phalcon/phalcon-devtools/actions/workflows/tests.yml/badge.svg?branch=5.0.x)](https://github.com/phalcon/phalcon-devtools/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/phalcon/phalcon-devtools/branch/5.0.x/graph/badge.svg)](https://codecov.io/gh/phalcon/phalcon-devtools)
 [![Latest Version](https://img.shields.io/packagist/v/phalcon/devtools.svg?style=flat-square)][:devtools:]
 [![Software License](https://img.shields.io/badge/license-BSD--3-brightgreen.svg?style=flat-square)][:license:]
 [![Total Downloads](https://img.shields.io/packagist/dt/phalcon/devtools.svg?style=flat-square)][:packagist:]
 [![Daily Downloads](https://img.shields.io/packagist/dd/phalcon/devtools.svg?style=flat-square)][:packagist:]
-[![Build Status](https://api.travis-ci.org/phalcon/phalcon-devtools.svg?branch=master)][:travis:]
-
-![Phalcon WebTools](http://i.imgur.com/B3V2uSf.png)
-
 
 ## What's Phalcon?
 
-Phalcon PHP is a web framework delivered as a C extension providing high performance and lower resource consumption.
+Phalcon is an open-source PHP framework focused on performance, low overhead, and a clean, expressive API.
 
-## What are Devtools?
+Phalcon 6 is consumed through Composer using the `phalcon/phalcon` package. This version of Phalcon DevTools does not require the legacy `ext-phalcon` extension.
 
-This tools provide you useful scripts to generate code helping to develop faster and easy applications that use
-with Phalcon framework.
+## What are DevTools?
+
+Phalcon DevTools provides command-line utilities and development tools for applications built with the Phalcon Framework.
+
+It includes commands for generating projects, controllers, models, scaffolds and migrations, as well as WebTools and an interactive console.
 
 ## Requirements
 
-* PHP >= 7.4.1
-* Phalcon >= 5.0.0
+- PHP `>= 8.2 < 9.0`
+- Composer 2
+- PDO (`ext-pdo`)
+- Phalcon 6 (`phalcon/phalcon`)
+
+Database-related commands also require the appropriate PDO driver, such as `pdo_mysql`, `pdo_pgsql`, or `pdo_sqlite`.
 
 ## Installing via Composer
 
-Install composer in a common location or in your project:
+The Phalcon 6-compatible DevTools work is currently available from the active development branch.
+
+Some Phalcon companion packages used by DevTools are still published as development versions, so Composer must allow development dependencies while preferring stable packages:
 
 ```bash
-curl -s http://getcomposer.org/installer | php
+composer config minimum-stability dev
+composer config prefer-stable true
+composer require --dev phalcon/devtools:5.0.x-dev
 ```
 
-Create the composer.json file as follows:
-
-```json
-{
-    "require-dev": {
-        "phalcon/devtools": "~5.0"
-    }
-}
-```
-
-If you are still using Phalcon 4.2.x, create a `composer.json` with the following instead:
-
-```json
-{
-    "require-dev": {
-        "phalcon/devtools": "^4.2"
-    }
-}
-```
-
-Run the composer installer:
+Composer exposes the DevTools executable in your project's `vendor/bin` directory:
 
 ```bash
-php composer.phar install
+vendor/bin/phalcon --help
 ```
 
-## Build `.phar`
-
-Install composer and box in a common location or in your project:
-```bash
-curl -s http://getcomposer.org/installer | php
-bin/composer install
-```
-
-Build phar file `phalcon-devtools`
-```bash
-bin/box build -v
-chmod +xr ./phalcon.phar
-# Test it!
-php ./phalcon.phar
-```
+Once a stable Phalcon 6-compatible DevTools release is published, projects will be able to use the corresponding stable version constraint instead.
 
 ## Installation via Git
 
-Phalcon Devtools can be installed by using Git.
-
-Just clone the repo and checkout the current branch:
+Clone the repository and install its dependencies:
 
 ```bash
-cd ~
 git clone https://github.com/phalcon/phalcon-devtools.git
 cd phalcon-devtools
-```
-
-This method requires a little bit more of setup. Probably the best way would be to symlink
-the `phalcon` file to a directory in your `PATH`, so you can issue phalcon commands in each directory
-where a phalcon project resides.
-
-```bash
-cd phalcon-devtools
 composer install
-ln -s $(pwd)/phalcon /usr/bin/phalcon
-chmod ugo+x /usr/bin/phalcon
 ```
 
-If you get a `"phalcon: command not found"` message while creating the symlink, make an alias.
+Run DevTools directly:
 
 ```bash
-alias phalcon=/home/[USERNAME]/phalcon-devtools/phalcon
+./phalcon --help
+```
+
+You can also create a symlink in a directory available in your `PATH`:
+
+```bash
+sudo ln -s "$(pwd)/phalcon" /usr/local/bin/phalcon
+```
+
+Then DevTools can be invoked globally:
+
+```bash
+phalcon --help
 ```
 
 ## Usage
 
-To get a list of available commands just execute following:
+To list the available commands:
 
 ```bash
 phalcon commands help
 ```
 
-This command should display something similar to:
+The available commands include:
 
-```sh
-$ phalcon --help
-
-Phalcon DevTools (5.0.0)
-
-Help:
-  Lists the commands available in Phalcon DevTools
-
-Available commands:
-  info             (alias of: i)
-  commands         (alias of: list, enumerate)
-  controller       (alias of: create-controller)
-  module           (alias of: create-module)
-  model            (alias of: create-model)
-  all-models       (alias of: create-all-models)
-  project          (alias of: create-project)
-  scaffold         (alias of: create-scaffold)
-  migration        (alias of: create-migration)
-  webtools         (alias of: create-webtools)
-  serve            (alias of: server)
-  console          (alias of: shell, psysh)
+```text
+info             (alias of: i)
+commands         (alias of: list, enumerate)
+controller       (alias of: create-controller)
+module           (alias of: create-module)
+model            (alias of: create-model)
+all-models       (alias of: create-all-models)
+project          (alias of: create-project)
+scaffold         (alias of: create-scaffold)
+migration        (alias of: create-migration)
+webtools         (alias of: create-webtools)
+serve            (alias of: server)
+console          (alias of: shell, psysh)
 ```
 
-## Database adapter
+Run command-specific help when additional options are needed:
 
-Should add `adapter` parameter in your `db` config file (if you use not MySQL database).
+```bash
+phalcon model --help
+phalcon scaffold --help
+phalcon migration --help
+```
 
-For PostgreSQL it will be something like:
+## Database configuration
+
+Commands that interact with a database require a database configuration.
+
+For MySQL:
 
 ```php
-$config = [
-  'host'     => 'localhost',
-  'dbname'   => 'my_db_name',
-  'username' => 'my_db_user',
-  'password' => 'my_db_user_password',
-  'adapter'  => 'Postgresql'
-];
+<?php
+
+use Phalcon\Config\Config;
+
+return new Config([
+    'database' => [
+        'adapter'  => 'Mysql',
+        'host'     => '127.0.0.1',
+        'username' => 'root',
+        'password' => '',
+        'dbname'   => 'application',
+        'port'     => 3306,
+    ],
+]);
 ```
 
-## Configuration file
+For PostgreSQL:
 
-By creating **config.json** or any other configuration file called **config** in root project you can set options for all possible commands, for example:
+```php
+<?php
+
+use Phalcon\Config\Config;
+
+return new Config([
+    'database' => [
+        'adapter'  => 'Postgresql',
+        'host'     => '127.0.0.1',
+        'username' => 'postgres',
+        'password' => '',
+        'dbname'   => 'application',
+        'port'     => 5432,
+    ],
+]);
+```
+
+## Migrations
+
+Phalcon DevTools integrates with `phalcon/migrations` v4.
+
+Common migration commands include:
+
+```bash
+phalcon migration generate
+phalcon migration list
+phalcon migration run
+```
+
+Migration behavior can also be configured in the application's configuration:
+
+```php
+'application' => [
+    'migrationsDir'       => 'app/migrations',
+    'migrationsTsBased'   => false,
+    'logInDb'             => false,
+    'no-auto-increment'   => false,
+    'skip-ref-schema'     => false,
+    'skip-foreign-checks' => false,
+],
+```
+
+## DevTools configuration
+
+A project-level DevTools configuration can define default options for individual commands.
+
+For example:
 
 ```json
 {
-  "migration" : {
-    "migrations": "App/Migrations",
-    "config": "App/Config/db.ini"
-  },
-  "controller" : {
-    "namespace": "Phalcon\\Test",
-    "directory": "App/Controllers",
-    "base-class": "App\\MyAbstractController"
-  }
+    "migration": {
+        "migrations": "App/Migrations",
+        "config": "App/Config/db.php"
+    },
+    "controller": {
+        "namespace": "App\\Controllers",
+        "directory": "App/Controllers",
+        "base-class": "App\\Controllers\\BaseController"
+    }
 }
 ```
 
-And then you can use `phalcon migration run` or `phalcon controller SomeClass` and those commands will be executed with options from file. Arguments provided by developer from command line will overwrite existing one in a file.
+Command-line arguments override values defined in the DevTools configuration.
+
+For example:
+
+```bash
+phalcon migration run
+phalcon controller SomeClass
+```
+
+## Build `phalcon.phar`
+
+Install the development dependencies:
+
+```bash
+composer install
+```
+
+Validate the Box configuration:
+
+```bash
+vendor/bin/box validate
+```
+
+Build the PHAR:
+
+```bash
+vendor/bin/box compile -v
+```
+
+Verify the generated PHAR:
+
+```bash
+php phalcon.phar --version
+```
+
+The release workflow performs the same validation, compilation, and smoke test before attaching `phalcon.phar` to a GitHub Release.
+
+## Development
+
+Install all dependencies:
+
+```bash
+composer install
+```
+
+Run the test suites:
+
+```bash
+vendor/bin/codecept run
+```
+
+Run PHPStan:
+
+```bash
+vendor/bin/phpstan analyse
+```
+
+Run Psalm:
+
+```bash
+vendor/bin/psalm --threads=1
+```
+
+Run PHP_CodeSniffer:
+
+```bash
+vendor/bin/phpcs
+```
+
+## Contributing
+
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ## License
 
-Phalcon Developer Tools is open source software licensed under the [New BSD License][:license:].<br>
+Phalcon Developer Tools is open-source software licensed under the [New BSD License][:license:].
+
 © Phalcon Framework Team and contributors
 
 [:packagist:]: https://packagist.org/packages/phalcon/devtools
 [:devtools:]: https://github.com/phalcon/phalcon-devtools
-[:license:]: https://github.com/phalcon/phalcon-devtools/blob/master/LICENSE.txt
-[:travis:]: https://travis-ci.org/phalcon/phalcon-devtools
+[:license:]: LICENSE.txt

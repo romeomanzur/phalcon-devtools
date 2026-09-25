@@ -1,3 +1,29 @@
+# Unreleased
+
+## Added
+
+- Added Phalcon 6 runtime support using the Composer-based `phalcon/phalcon` package.
+- Added PHP 8.2, 8.3 and 8.4 CI coverage.
+- Added Codeception 5 console coverage for migrations.
+- Added PHPStan and Psalm static-analysis coverage for the Phalcon 6 codebase.
+
+## Changed
+
+- Updated runtime requirements to PHP 8.2+ and Phalcon 6.
+- Updated project, model, scaffold and WebTools generation for Phalcon 6.
+- Updated migration support for `phalcon/migrations` v4.
+- Modernized Codeception, PHPUnit, PHPStan, Psalm and PHP_CodeSniffer tooling.
+- Reduced runtime dependencies so development-only packages are excluded from consumer installations.
+- Updated migrations to use `Phalcon\Migrations\Utils\Config`.
+- Updated migration configuration handling for Phalcon Migrations v4.
+
+## Fixed
+
+- Fixed model metadata namespace handling under Phalcon 6.
+- Fixed migration `generate`, `run` and `list` compatibility with `phalcon/migrations` v4.
+- Fixed migration options loaded from application configuration.
+- Fixed compatibility issues exposed by PHP 8.4.
+
 # [4.1.0](https://github.com/phalcon/cphalcon/releases/tag/v4.1.0)
 ## Fixed
 - Fixed column annotation bugs on model creation [1425](https://github.com/phalcon/phalcon-devtools/issues/1425)
