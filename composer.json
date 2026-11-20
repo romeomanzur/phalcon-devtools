@@ -37,10 +37,10 @@
     "require": {
         "php": ">=8.2 <9.0",
         "ext-pdo": "*",
-        "phalcon/annotations": "1.0.x-dev",
-        "phalcon/migrations": "dev-master",
+        "phalcon/annotations": "^1.0 || 1.0.x-dev",
+        "phalcon/migrations": "^4.0 || dev-master",
         "phalcon/phalcon": "^6.0@RC",
-        "phalcon/volt": "1.0.x-dev",
+        "phalcon/volt": "^1.0 || 1.0.x-dev",
         "psy/psysh": "^0.12.24"
     },
     "require-dev": {
